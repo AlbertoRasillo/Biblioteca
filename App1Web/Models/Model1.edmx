@@ -22,15 +22,13 @@
           <Property Name="nombre" Type="varchar" MaxLength="50" />
           <Property Name="version" Type="float" />
         </EntityType>
-        <EntityType Name="Cd/Dvd">
+        <EntityType Name="Cd_Dvd">
           <Key>
             <PropertyRef Name="id_obra" />
           </Key>
           <Property Name="id_obra" Type="int" Nullable="false" />
           <Property Name="duracion" Type="float" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'biblioteca.dbo.Contener' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Contener">
           <Key>
             <PropertyRef Name="id_obra" />
@@ -47,8 +45,6 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Contener' no tiene definida n
           <Property Name="id_obra" Type="int" />
           <Property Name="comentarios" Type="varchar" MaxLength="100" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="Crear">
           <Key>
             <PropertyRef Name="id_obra" />
@@ -62,7 +58,7 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
             <PropertyRef Name="id_obra" />
           </Key>
           <Property Name="id_obra" Type="int" Nullable="false" />
-          <Property Name="isbn" Type="varchar" MaxLength="50" />
+          <Property Name="isbn" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Obra">
           <Key>
@@ -108,6 +104,18 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           <Property Name="dni" Type="varchar" MaxLength="50" />
           <Property Name="telefono" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Cd_Dvd_Obra">
+          <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
+          <End Role="Cd_Dvd" Type="Self.Cd_Dvd" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Obra">
+              <PropertyRef Name="id_obra" />
+            </Principal>
+            <Dependent Role="Cd_Dvd">
+              <PropertyRef Name="id_obra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Contener_Catalogo">
           <End Role="Catalogo" Type="Self.Catalogo" Multiplicity="1" />
           <End Role="Contener" Type="Self.Contener" Multiplicity="*" />
@@ -180,18 +188,6 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Obra_Cd">
-          <End Role="Cd/Dvd" Type="Self.Cd/Dvd" Multiplicity="1" />
-          <End Role="Obra" Type="Self.Obra" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Cd/Dvd">
-              <PropertyRef Name="id_obra" />
-            </Principal>
-            <Dependent Role="Obra">
-              <PropertyRef Name="id_obra" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Prestamo_Copias">
           <End Role="Copias" Type="Self.Copias" Multiplicity="0..1" />
           <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
@@ -216,28 +212,53 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="bibliotecaModelStoreContainer">
           <EntitySet Name="Autores" EntityType="Self.Autores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Catalogo" EntityType="Self.Catalogo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Cd/Dvd" EntityType="Self.Cd/Dvd" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cd_Dvd" EntityType="Self.Cd_Dvd" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contener" EntityType="Self.Contener" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Copias" EntityType="Self.Copias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Crear" EntityType="Self.Crear" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Libro" EntityType="Self.Libro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Obra" EntityType="Self.Obra" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Prestamo" EntityType="Self.Prestamo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Contener" EntityType="Self.Contener" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Contener].[id_obra] AS [id_obra], 
-    [Contener].[id_catalogo] AS [id_catalogo]
-    FROM [dbo].[Contener] AS [Contener]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Crear" EntityType="Self.Crear" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Crear].[id_obra] AS [id_obra], 
-    [Crear].[id_autor] AS [id_autor]
-    FROM [dbo].[Crear] AS [Crear]</DefiningQuery>
-          </EntitySet>
+          <AssociationSet Name="FK_Cd_Dvd_Obra" Association="Self.FK_Cd_Dvd_Obra">
+            <End Role="Obra" EntitySet="Obra" />
+            <End Role="Cd_Dvd" EntitySet="Cd_Dvd" />
+          </AssociationSet>
           <AssociationSet Name="FK_Contener_Catalogo" Association="Self.FK_Contener_Catalogo">
             <End Role="Catalogo" EntitySet="Catalogo" />
             <End Role="Contener" EntitySet="Contener" />
@@ -261,10 +282,6 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           <AssociationSet Name="FK_Libro_Obra" Association="Self.FK_Libro_Obra">
             <End Role="Obra" EntitySet="Obra" />
             <End Role="Libro" EntitySet="Libro" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Obra_Cd" Association="Self.FK_Obra_Cd">
-            <End Role="Cd/Dvd" EntitySet="Cd/Dvd" />
-            <End Role="Obra" EntitySet="Obra" />
           </AssociationSet>
           <AssociationSet Name="FK_Prestamo_Copias" Association="Self.FK_Prestamo_Copias">
             <End Role="Copias" EntitySet="Copias" />
@@ -305,7 +322,7 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           </Key>
           <Property Name="id_obra" Type="Int32" Nullable="false" />
           <Property Name="duracion" Type="Double" />
-          <NavigationProperty Name="Obra" Relationship="Self.FK_Obra_Cd" FromRole="Cd_Dvd" ToRole="Obra" />
+          <NavigationProperty Name="Obra" Relationship="Self.FK_Cd_Dvd_Obra" FromRole="Cd_Dvd" ToRole="Obra" />
         </EntityType>
         <EntityType Name="Copias">
           <Key>
@@ -322,7 +339,7 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
             <PropertyRef Name="id_obra" />
           </Key>
           <Property Name="id_obra" Type="Int32" Nullable="false" />
-          <Property Name="isbn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="isbn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Obra" Relationship="Self.FK_Libro_Obra" FromRole="Libro" ToRole="Obra" />
         </EntityType>
         <EntityType Name="Obra">
@@ -334,7 +351,7 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           <Property Name="fecha_publi" Type="DateTime" Precision="0" />
           <Property Name="categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="n_ejemplares" Type="Int32" />
-          <NavigationProperty Name="Cd_Dvd" Relationship="Self.FK_Obra_Cd" FromRole="Obra" ToRole="Cd_Dvd" />
+          <NavigationProperty Name="Cd_Dvd" Relationship="Self.FK_Cd_Dvd_Obra" FromRole="Obra" ToRole="Cd_Dvd" />
           <NavigationProperty Name="Copias" Relationship="Self.FK_Copias_Obra" FromRole="Obra" ToRole="Copias" />
           <NavigationProperty Name="Libro" Relationship="Self.FK_Libro_Obra" FromRole="Obra" ToRole="Libro" />
           <NavigationProperty Name="Catalogo" Relationship="Self.Contener" FromRole="Obra" ToRole="Catalogo" />
@@ -377,14 +394,14 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Prestamo" Relationship="Self.FK_Prestamo_Socios" FromRole="Usuarios" ToRole="Prestamo" />
         </EntityType>
-        <Association Name="FK_Obra_Cd">
-          <End Role="Cd_Dvd" Type="Self.Cd_Dvd" Multiplicity="1" />
-          <End Role="Obra" Type="Self.Obra" Multiplicity="0..1" />
+        <Association Name="FK_Cd_Dvd_Obra">
+          <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
+          <End Role="Cd_Dvd" Type="Self.Cd_Dvd" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="Cd_Dvd">
+            <Principal Role="Obra">
               <PropertyRef Name="id_obra" />
             </Principal>
-            <Dependent Role="Obra">
+            <Dependent Role="Cd_Dvd">
               <PropertyRef Name="id_obra" />
             </Dependent>
           </ReferentialConstraint>
@@ -445,7 +462,7 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           <End Role="Autores" Type="Self.Autores" Multiplicity="*" />
           <End Role="Obra" Type="Self.Obra" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="bibliotecaDB" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="bibliotecaEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Autores" EntityType="Self.Autores" />
           <EntitySet Name="Catalogo" EntityType="Self.Catalogo" />
           <EntitySet Name="Cd_Dvd" EntityType="Self.Cd_Dvd" />
@@ -455,9 +472,9 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           <EntitySet Name="Prestamo" EntityType="Self.Prestamo" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
-          <AssociationSet Name="FK_Obra_Cd" Association="Self.FK_Obra_Cd">
-            <End Role="Cd_Dvd" EntitySet="Cd_Dvd" />
+          <AssociationSet Name="FK_Cd_Dvd_Obra" Association="Self.FK_Cd_Dvd_Obra">
             <End Role="Obra" EntitySet="Obra" />
+            <End Role="Cd_Dvd" EntitySet="Cd_Dvd" />
           </AssociationSet>
           <AssociationSet Name="FK_Copias_Obra" Association="Self.FK_Copias_Obra">
             <End Role="Obra" EntitySet="Obra" />
@@ -483,13 +500,54 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
             <End Role="Autores" EntitySet="Autores" />
             <End Role="Obra" EntitySet="Obra" />
           </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(bibliotecaModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(bibliotecaModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="bibliotecaModelStoreContainer" CdmEntityContainer="bibliotecaDB">
+        <EntityContainerMapping StorageEntityContainer="bibliotecaModelStoreContainer" CdmEntityContainer="bibliotecaEntities">
           <EntitySetMapping Name="Autores">
             <EntityTypeMapping TypeName="bibliotecaModel.Autores">
               <MappingFragment StoreEntitySet="Autores">
@@ -511,7 +569,7 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
           </EntitySetMapping>
           <EntitySetMapping Name="Cd_Dvd">
             <EntityTypeMapping TypeName="bibliotecaModel.Cd_Dvd">
-              <MappingFragment StoreEntitySet="Cd/Dvd">
+              <MappingFragment StoreEntitySet="Cd_Dvd">
                 <ScalarProperty Name="id_obra" ColumnName="id_obra" />
                 <ScalarProperty Name="duracion" ColumnName="duracion" />
               </MappingFragment>
@@ -598,6 +656,30 @@ advertencia 6002: La tabla o vista 'biblioteca.dbo.Crear' no tiene definida ning
               <ScalarProperty Name="id_obra" ColumnName="id_obra" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="bibliotecaModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="bibliotecaModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="bibliotecaModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="bibliotecaModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="bibliotecaModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="bibliotecaModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="bibliotecaModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="bibliotecaModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="bibliotecaModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

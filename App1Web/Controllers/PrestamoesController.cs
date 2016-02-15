@@ -10,126 +10,116 @@ using App1Web.Models;
 
 namespace App1Web.Controllers
 {
-    public class ObrasController : Controller
+    public class PrestamoesController : Controller
     {
         private bibliotecaEntities db = new bibliotecaEntities();
 
-        // GET: Obras
+        // GET: Prestamoes
         public ActionResult Index()
         {
-            var obra = db.Obra.Include(o => o.Cd_Dvd).Include(o => o.Libro);
-            return View(obra.ToList());
+            var prestamo = db.Prestamo.Include(p => p.Copias).Include(p => p.Usuarios);
+            return View(prestamo.ToList());
         }
 
-        // GET: Obras/Details/5
+        // GET: Prestamoes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Obra obra = db.Obra.Find(id);
-            if (obra == null)
+            Prestamo prestamo = db.Prestamo.Find(id);
+            if (prestamo == null)
             {
                 return HttpNotFound();
             }
-            return View(obra);
+            return View(prestamo);
         }
 
-        // GET: Obras/Create
+        // GET: Prestamoes/Create
         public ActionResult Create()
         {
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra");
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn");
+            ViewBag.n_copia = new SelectList(db.Copias, "n_copia", "comentarios");
+            ViewBag.cod_socio = new SelectList(db.Usuarios, "cod_socio", "usuario");
             return View();
         }
 
-        // POST: Obras/Create
+        // POST: Prestamoes/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares")] Obra obra,
-            [Bind(Include = "id_obra,isbn")] Libro libro, [Bind(Include = "n_copia,id_obra,comentarios")] Copias copias)
+        public ActionResult Create([Bind(Include = "id_prestamo,cod_socio,n_copia,tipo_prestamo,fecha_prestamo,fecha_devolucion,fecha_tope")] Prestamo prestamo)
         {
             if (ModelState.IsValid)
             {
-                db.Obra.Add(obra);
-                db.Libro.Add(libro);
-                for(int i = 0; i < obra.n_ejemplares; i++)
-                {
-                    Copias copia = new Copias();
-                    copia.n_copia = copias.n_copia;
-                    copia.id_obra = obra.id_obra;
-                    copia.comentarios = copias.comentarios;
-                }
-                db.Copias.Add(copias);
+                db.Prestamo.Add(prestamo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "id_obra", obra.id_obra);
-            return View(obra);
+            ViewBag.n_copia = new SelectList(db.Copias, "n_copia", "comentarios", prestamo.n_copia);
+            ViewBag.cod_socio = new SelectList(db.Usuarios, "cod_socio", "usuario", prestamo.cod_socio);
+            return View(prestamo);
         }
 
-        // GET: Obras/Edit/5
+        // GET: Prestamoes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Obra obra = db.Obra.Find(id);
-            if (obra == null)
+            Prestamo prestamo = db.Prestamo.Find(id);
+            if (prestamo == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn", obra.id_obra);
-            return View(obra);
+            ViewBag.n_copia = new SelectList(db.Copias, "n_copia", "comentarios", prestamo.n_copia);
+            ViewBag.cod_socio = new SelectList(db.Usuarios, "cod_socio", "usuario", prestamo.cod_socio);
+            return View(prestamo);
         }
 
-        // POST: Obras/Edit/5
+        // POST: Prestamoes/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares")] Obra obra)
+        public ActionResult Edit([Bind(Include = "id_prestamo,cod_socio,n_copia,tipo_prestamo,fecha_prestamo,fecha_devolucion,fecha_tope")] Prestamo prestamo)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(obra).State = EntityState.Modified;
+                db.Entry(prestamo).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn", obra.id_obra);
-            return View(obra);
+            ViewBag.n_copia = new SelectList(db.Copias, "n_copia", "comentarios", prestamo.n_copia);
+            ViewBag.cod_socio = new SelectList(db.Usuarios, "cod_socio", "usuario", prestamo.cod_socio);
+            return View(prestamo);
         }
 
-        // GET: Obras/Delete/5
+        // GET: Prestamoes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Obra obra = db.Obra.Find(id);
-            if (obra == null)
+            Prestamo prestamo = db.Prestamo.Find(id);
+            if (prestamo == null)
             {
                 return HttpNotFound();
             }
-            return View(obra);
+            return View(prestamo);
         }
 
-        // POST: Obras/Delete/5
+        // POST: Prestamoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Obra obra = db.Obra.Find(id);
-            db.Obra.Remove(obra);
+            Prestamo prestamo = db.Prestamo.Find(id);
+            db.Prestamo.Remove(prestamo);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

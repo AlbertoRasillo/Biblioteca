@@ -170,56 +170,69 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AutoresController.cs" />
+    <Compile Include="Controllers\CatalogoesController.cs" />
+    <Compile Include="Controllers\Cd_DvdController.cs" />
+    <Compile Include="Controllers\CopiasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LibroesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ObrasController.cs" />
+    <Compile Include="Controllers\PrestamoesController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Autores.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Biblioteca.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Biblioteca.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Biblioteca.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Biblioteca.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Biblioteca.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Biblioteca.edmx</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Catalogo.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Cd_Dvd.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Copias.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Libro.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Obra.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Prestamo.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuarios.cs">
-      <DependentUpon>Biblioteca.tt</DependentUpon>
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -231,24 +244,24 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\Biblioteca.Context.tt">
+    <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Biblioteca.edmx</DependentUpon>
-      <LastGenOutput>Biblioteca.Context.cs</LastGenOutput>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Biblioteca.tt">
+    <Content Include="Models\Model1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Biblioteca.edmx</DependentUpon>
-      <LastGenOutput>Biblioteca.cs</LastGenOutput>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\Biblioteca.edmx">
+    <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Biblioteca.Designer.cs</LastGenOutput>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\Biblioteca.edmx.diagram">
-      <DependentUpon>Biblioteca.edmx</DependentUpon>
+    <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -296,11 +309,46 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Usuarios\Create.cshtml" />
+    <Content Include="Views\Usuarios\Delete.cshtml" />
+    <Content Include="Views\Usuarios\Details.cshtml" />
+    <Content Include="Views\Usuarios\Edit.cshtml" />
+    <Content Include="Views\Usuarios\Index.cshtml" />
+    <Content Include="Views\Prestamoes\Create.cshtml" />
+    <Content Include="Views\Prestamoes\Delete.cshtml" />
+    <Content Include="Views\Prestamoes\Details.cshtml" />
+    <Content Include="Views\Prestamoes\Edit.cshtml" />
+    <Content Include="Views\Prestamoes\Index.cshtml" />
     <Content Include="Views\Obras\Create.cshtml" />
     <Content Include="Views\Obras\Delete.cshtml" />
     <Content Include="Views\Obras\Details.cshtml" />
     <Content Include="Views\Obras\Edit.cshtml" />
     <Content Include="Views\Obras\Index.cshtml" />
+    <Content Include="Views\Copias\Create.cshtml" />
+    <Content Include="Views\Copias\Delete.cshtml" />
+    <Content Include="Views\Copias\Details.cshtml" />
+    <Content Include="Views\Copias\Edit.cshtml" />
+    <Content Include="Views\Copias\Index.cshtml" />
+    <Content Include="Views\Autores\Create.cshtml" />
+    <Content Include="Views\Autores\Delete.cshtml" />
+    <Content Include="Views\Autores\Details.cshtml" />
+    <Content Include="Views\Autores\Edit.cshtml" />
+    <Content Include="Views\Autores\Index.cshtml" />
+    <Content Include="Views\Libroes\Create.cshtml" />
+    <Content Include="Views\Libroes\Delete.cshtml" />
+    <Content Include="Views\Libroes\Details.cshtml" />
+    <Content Include="Views\Libroes\Edit.cshtml" />
+    <Content Include="Views\Libroes\Index.cshtml" />
+    <Content Include="Views\Cd_Dvd\Create.cshtml" />
+    <Content Include="Views\Cd_Dvd\Delete.cshtml" />
+    <Content Include="Views\Cd_Dvd\Details.cshtml" />
+    <Content Include="Views\Cd_Dvd\Edit.cshtml" />
+    <Content Include="Views\Cd_Dvd\Index.cshtml" />
+    <Content Include="Views\Catalogoes\Create.cshtml" />
+    <Content Include="Views\Catalogoes\Delete.cshtml" />
+    <Content Include="Views\Catalogoes\Details.cshtml" />
+    <Content Include="Views\Catalogoes\Edit.cshtml" />
+    <Content Include="Views\Catalogoes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

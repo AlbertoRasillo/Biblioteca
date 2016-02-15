@@ -10,126 +10,112 @@ using App1Web.Models;
 
 namespace App1Web.Controllers
 {
-    public class ObrasController : Controller
+    public class CopiasController : Controller
     {
         private bibliotecaEntities db = new bibliotecaEntities();
 
-        // GET: Obras
+        // GET: Copias
         public ActionResult Index()
         {
-            var obra = db.Obra.Include(o => o.Cd_Dvd).Include(o => o.Libro);
-            return View(obra.ToList());
+            var copias = db.Copias.Include(c => c.Obra);
+            return View(copias.ToList());
         }
 
-        // GET: Obras/Details/5
+        // GET: Copias/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Obra obra = db.Obra.Find(id);
-            if (obra == null)
+            Copias copias = db.Copias.Find(id);
+            if (copias == null)
             {
                 return HttpNotFound();
             }
-            return View(obra);
+            return View(copias);
         }
 
-        // GET: Obras/Create
+        // GET: Copias/Create
         public ActionResult Create()
         {
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra");
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn");
+            ViewBag.id_obra = new SelectList(db.Obra, "id_obra", "nombre");
             return View();
         }
 
-        // POST: Obras/Create
+        // POST: Copias/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares")] Obra obra,
-            [Bind(Include = "id_obra,isbn")] Libro libro, [Bind(Include = "n_copia,id_obra,comentarios")] Copias copias)
+        public ActionResult Create([Bind(Include = "n_copia,id_obra,comentarios")] Copias copias)
         {
             if (ModelState.IsValid)
             {
-                db.Obra.Add(obra);
-                db.Libro.Add(libro);
-                for(int i = 0; i < obra.n_ejemplares; i++)
-                {
-                    Copias copia = new Copias();
-                    copia.n_copia = copias.n_copia;
-                    copia.id_obra = obra.id_obra;
-                    copia.comentarios = copias.comentarios;
-                }
                 db.Copias.Add(copias);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "id_obra", obra.id_obra);
-            return View(obra);
+            ViewBag.id_obra = new SelectList(db.Obra, "id_obra", "id_obra", copias.id_obra);
+            return View(copias);
         }
 
-        // GET: Obras/Edit/5
+        // GET: Copias/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Obra obra = db.Obra.Find(id);
-            if (obra == null)
+            Copias copias = db.Copias.Find(id);
+            if (copias == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn", obra.id_obra);
-            return View(obra);
+            ViewBag.id_obra = new SelectList(db.Obra, "id_obra", "nombre", copias.id_obra);
+            return View(copias);
         }
 
-        // POST: Obras/Edit/5
+        // POST: Copias/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares")] Obra obra)
+        public ActionResult Edit([Bind(Include = "n_copia,id_obra,comentarios")] Copias copias)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(obra).State = EntityState.Modified;
+                db.Entry(copias).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
-            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn", obra.id_obra);
-            return View(obra);
+            ViewBag.id_obra = new SelectList(db.Obra, "id_obra", "nombre", copias.id_obra);
+            return View(copias);
         }
 
-        // GET: Obras/Delete/5
+        // GET: Copias/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Obra obra = db.Obra.Find(id);
-            if (obra == null)
+            Copias copias = db.Copias.Find(id);
+            if (copias == null)
             {
                 return HttpNotFound();
             }
-            return View(obra);
+            return View(copias);
         }
 
-        // POST: Obras/Delete/5
+        // POST: Copias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Obra obra = db.Obra.Find(id);
-            db.Obra.Remove(obra);
+            Copias copias = db.Copias.Find(id);
+            db.Copias.Remove(copias);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
