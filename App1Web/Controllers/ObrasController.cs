@@ -56,13 +56,6 @@ namespace App1Web.Controllers
             {
                 db.Obra.Add(obra);
                 db.Libro.Add(libro);
-                for(int i = 0; i < obra.n_ejemplares; i++)
-                {
-                    Copias copia = new Copias();
-                    copia.n_copia = copias.n_copia;
-                    copia.id_obra = obra.id_obra;
-                    copia.comentarios = copias.comentarios;
-                }
                 db.Copias.Add(copias);
                 db.SaveChanges();
                 return RedirectToAction("Index");
