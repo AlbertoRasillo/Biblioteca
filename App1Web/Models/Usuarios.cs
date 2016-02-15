@@ -27,6 +27,7 @@ namespace App1Web.Models
         public string apellido { get; set; }
         public string dni { get; set; }
         public string telefono { get; set; }
+        public string rol { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Prestamo> Prestamo { get; set; }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="bibliotecaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="bibliotecaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Autores">
           <Key>
             <PropertyRef Name="id_autor" />
@@ -103,6 +103,7 @@
           <Property Name="apellido" Type="varchar" MaxLength="50" />
           <Property Name="dni" Type="varchar" MaxLength="50" />
           <Property Name="telefono" Type="varchar" MaxLength="50" />
+          <Property Name="rol" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Cd_Dvd_Obra">
           <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
@@ -141,7 +142,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Copias_Obra">
-          <End Role="Obra" Type="Self.Obra" Multiplicity="0..1" />
+          <End Role="Obra" Type="Self.Obra" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Copias" Type="Self.Copias" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Obra">
@@ -177,7 +180,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Libro_Obra">
-          <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
+          <End Role="Obra" Type="Self.Obra" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Libro" Type="Self.Libro" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Obra">
@@ -292,8 +297,7 @@
             <End Role="Prestamo" EntitySet="Prestamo" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="bibliotecaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -393,6 +397,7 @@
           <Property Name="dni" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Prestamo" Relationship="Self.FK_Prestamo_Socios" FromRole="Usuarios" ToRole="Prestamo" />
+          <Property Name="rol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Cd_Dvd_Obra">
           <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
@@ -630,6 +635,7 @@
           <EntitySetMapping Name="Usuarios">
             <EntityTypeMapping TypeName="bibliotecaModel.Usuarios">
               <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="rol" ColumnName="rol" />
                 <ScalarProperty Name="cod_socio" ColumnName="cod_socio" />
                 <ScalarProperty Name="usuario" ColumnName="usuario" />
                 <ScalarProperty Name="contraseña" ColumnName="contraseña" />
