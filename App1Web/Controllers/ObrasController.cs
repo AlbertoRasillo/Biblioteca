@@ -49,14 +49,20 @@ namespace App1Web.Controllers
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares")] Obra obra,
-            [Bind(Include = "id_obra,isbn")] Libro libro, [Bind(Include = "n_copia,id_obra,comentarios")] Copias copias)
+        public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares, Copias")] Obra obra,
+            [Bind(Include = "id_obra,isbn")] Libro libro, [Bind(Include = "id_obra,comentarios")] Copias copias)
         {
             if (ModelState.IsValid)
             {
+                for (int i = 0; i < obra.n_ejemplares; i++)
+                {
+                    Copias copia = new Copias();
+                    copia.id_obra = obra.id_obra;
+                    copia.comentarios = copias.comentarios;
+                    obra.Copias.Add(copia);
+                }
                 db.Obra.Add(obra);
                 db.Libro.Add(libro);
-                db.Copias.Add(copias);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

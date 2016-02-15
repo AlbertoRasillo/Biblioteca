@@ -21,7 +21,7 @@ namespace App1Web.Models
         }
     
         public int n_copia { get; set; }
-        public Nullable<int> id_obra { get; set; }
+        public int id_obra { get; set; }
         public string comentarios { get; set; }
     
         public virtual Obra Obra { get; set; }
