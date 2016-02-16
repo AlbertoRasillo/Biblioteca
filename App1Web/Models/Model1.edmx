@@ -106,7 +106,9 @@
           <Property Name="rol" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Cd_Dvd_Obra">
-          <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
+          <End Role="Obra" Type="Self.Obra" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Cd_Dvd" Type="Self.Cd_Dvd" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Obra">
@@ -118,7 +120,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Contener_Catalogo">
-          <End Role="Catalogo" Type="Self.Catalogo" Multiplicity="1" />
+          <End Role="Catalogo" Type="Self.Catalogo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Contener" Type="Self.Contener" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Catalogo">
@@ -130,7 +134,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Contener_Obra">
-          <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
+          <End Role="Obra" Type="Self.Obra" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Contener" Type="Self.Contener" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Obra">
@@ -156,7 +162,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Crear_Autores">
-          <End Role="Autores" Type="Self.Autores" Multiplicity="1" />
+          <End Role="Autores" Type="Self.Autores" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Crear" Type="Self.Crear" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Autores">
@@ -168,7 +176,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Crear_Obra">
-          <End Role="Obra" Type="Self.Obra" Multiplicity="1" />
+          <End Role="Obra" Type="Self.Obra" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Crear" Type="Self.Crear" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Obra">
@@ -194,7 +204,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Prestamo_Copias">
-          <End Role="Copias" Type="Self.Copias" Multiplicity="0..1" />
+          <End Role="Copias" Type="Self.Copias" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Copias">
@@ -206,7 +218,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Prestamo_Socios">
-          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Prestamo" Type="Self.Prestamo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuarios">
