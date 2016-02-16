@@ -16,7 +16,7 @@ namespace App1Web.Controllers
 
         // GET: Usuarios
         public ActionResult Index()
-        {
+        {  
             return View(db.Usuarios.ToList());
         }
 
@@ -134,17 +134,25 @@ namespace App1Web.Controllers
         // POST: Usuarios/Login/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login([Bind(Include = "cod_socio,usuario,contraseña,nombre,apellido,dni,telefono")] Usuarios usuarios)
+        public ActionResult Login([Bind(Include = "cod_socio,usuario,contraseña,nombre,apellido,dni,telefono,rol")] Usuarios usuarios)
         {
             foreach(Usuarios usu in db.Usuarios)
             {
                 if(usu.usuario.Equals(usuarios.usuario) & usu.contraseña.Equals(usuarios.contraseña))
                 {
-                    System.Web.HttpContext.Current.Session["usuario"] = usuarios.usuario;
+                    System.Web.HttpContext.Current.Session["rol"] = usu.rol;
                     return RedirectToAction("Index");
                 }
             }
             return View();
         }
+
+        // GET: Usuarios/Salir
+        public ActionResult Salir()
+        {
+            Session.Abandon();
+            return RedirectToAction("Login");
+        }
+
     }
 }
