@@ -17,7 +17,7 @@ namespace App1Web.Controllers
         // GET: Obras
         public ActionResult Index()
         {
-            var obra = db.Obra.Include(o => o.Cd_Dvd).Include(o => o.Libro);
+            var obra = db.Obra.Include(o => o.Cd_Dvd).Include(o => o.Libro).Include(o => o.Autores);
             return View(obra.ToList());
         }
 
@@ -41,6 +41,7 @@ namespace App1Web.Controllers
         {
             ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra");
             ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "isbn");
+            ViewBag.id_autor = new SelectList(db.Autores, "id_autor", "nombre");
             return View();
         }
 
@@ -50,7 +51,9 @@ namespace App1Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares, Copias")] Obra obra,
-            [Bind(Include = "id_obra,isbn")] Libro libro, [Bind(Include = "id_obra,comentarios")] Copias copias)
+            [Bind(Include = "id_obra,isbn")] Libro libro,
+            [Bind(Include = "id_obra,duracion")] Cd_Dvd cd_dvd
+            , [Bind(Include = "id_obra,comentarios")] Copias copias, String tipoObra)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +65,14 @@ namespace App1Web.Controllers
                     obra.Copias.Add(copia);
                 }
                 db.Obra.Add(obra);
-                db.Libro.Add(libro);
+                if(tipoObra == "Libro")
+                {
+                    db.Libro.Add(libro);
+                }
+                if (tipoObra == "CdDvD")
+                {
+                    db.Cd_Dvd.Add(cd_dvd);
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

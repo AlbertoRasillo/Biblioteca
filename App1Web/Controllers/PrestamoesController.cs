@@ -16,8 +16,8 @@ namespace App1Web.Controllers
 
         // GET: Prestamoes
         public ActionResult Index()
-        {
-            var prestamo = db.Prestamo.Include(p => p.Copias).Include(p => p.Usuarios);
+        {   //Añadidodo p.Copias.Obra -Obra solo
+            var prestamo = db.Prestamo.Include(p => p.Copias.Obra).Include(p => p.Usuarios);
             return View(prestamo.ToList());
         }
 
@@ -39,7 +39,7 @@ namespace App1Web.Controllers
         // GET: Prestamoes/Create
         public ActionResult Create()
         {
-            ViewBag.n_copia = new SelectList(db.Copias, "n_copia", "comentarios");
+            ViewBag.id_obra = new SelectList(db.Obra, "id_obra", "nombre");
             ViewBag.cod_socio = new SelectList(db.Usuarios, "cod_socio", "usuario");
             return View();
         }
@@ -49,10 +49,18 @@ namespace App1Web.Controllers
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id_prestamo,cod_socio,n_copia,tipo_prestamo,fecha_prestamo,fecha_devolucion,fecha_tope")] Prestamo prestamo)
+        public ActionResult Create([Bind(Include = "id_prestamo,cod_socio,n_copia,tipo_prestamo,fecha_prestamo,fecha_devolucion,fecha_tope")] Prestamo prestamo,
+            [Bind(Include = "n_copia,id_obra,comentarios")] Copias copia )
         {
             if (ModelState.IsValid)
             {
+                foreach(Copias elemnt in db.Copias)
+                {
+                    if(elemnt.id_obra == copia.id_obra)
+                    {
+                        prestamo.n_copia = elemnt.n_copia;
+                    }
+                }
                 db.Prestamo.Add(prestamo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
