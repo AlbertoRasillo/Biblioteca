@@ -50,10 +50,12 @@ namespace App1Web.Controllers
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares, Copias")] Obra obra,
+        public ActionResult Create([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares, Copias, Autores")] Obra obra,
             [Bind(Include = "id_obra,isbn")] Libro libro,
-            [Bind(Include = "id_obra,duracion")] Cd_Dvd cd_dvd
-            , [Bind(Include = "id_obra,comentarios")] Copias copias, String tipoObra)
+            [Bind(Include = "id_obra,duracion")] Cd_Dvd cd_dvd,
+            [Bind(Include = "id_obra,comentarios")] Copias copias, String tipoObra,
+            [Bind(Include = "id_autor,nombre,apellidos,año")] Autores autor,
+            IEnumerable<SelectList> Autores)
         {
             if (ModelState.IsValid)
             {
@@ -64,8 +66,13 @@ namespace App1Web.Controllers
                     copia.comentarios = copias.comentarios;
                     obra.Copias.Add(copia);
                 }
+                //obra.Autores = Autores;
+                //obra.Autores.Add(Autor);
                 db.Obra.Add(obra);
-                if(tipoObra == "Libro")
+                //busca el autor en la bd, si no existe lo inserta, si exiiste lo modifica/actualiza
+                //Autores autor1 = db.Autores.Find(autor.id_autor);
+
+                if (tipoObra == "Libro")
                 {
                     db.Libro.Add(libro);
                 }
