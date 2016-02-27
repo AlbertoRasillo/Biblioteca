@@ -3,11 +3,27 @@
 @{
     ViewBag.Title = "Index";
 }
+@{
+    if ((String)Session["rol"] == null)
+    {
+        Response.Redirect("~/Usuarios/Login");
+
+    }
+}
 
 <h2>Listado de Obras</h2>
-
+@using (Html.BeginForm())
+{
+    <p>
+        Buscar por Obra: @Html.TextBox("SearchString")
+        <input type="submit" value="Buscar" />
+    </p>
+}
 <p>
-    @Html.ActionLink("Crear Obra", "Create")
+    @if ((String)Session["rol"] == "admin")
+    {
+        @Html.ActionLink("Crear Obra", "Create")
+    }
 </p>
 <table class="table">
     <tr>
@@ -52,11 +68,20 @@
         <td>
             @Html.DisplayFor(modelItem => item.Libro.isbn)
         </td>
+        @if ((String)Session["rol"] == "admin")
+        {
         <td>
             @Html.ActionLink("Editar", "Edit", new { id=item.id_obra }) |
             @Html.ActionLink("Detalles", "Details", new { id=item.id_obra }) |
             @Html.ActionLink("Eliminar", "Delete", new { id=item.id_obra })
         </td>
+        }
+        @if ((String)Session["rol"] == "user")
+        {
+         <td>
+            @Html.ActionLink("Detalles", "Details", new { id = item.id_obra }) 
+         </td>
+        }
     </tr>
 }
 

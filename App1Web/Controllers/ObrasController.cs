@@ -15,9 +15,13 @@ namespace App1Web.Controllers
         private bibliotecaEntities db = new bibliotecaEntities();
 
         // GET: Obras
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
-            var obra = db.Obra.Include(o => o.Cd_Dvd).Include(o => o.Libro).Include(o => o.Autores);
+            var obra = db.Obra.Include(o => o.Cd_Dvd).Include(o => o.Libro).Include(o => o.Autores).Include(o => o.Copias);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                obra = obra.Where(o => o.nombre.Contains(searchString));
+            }
             return View(obra.ToList());
         }
 
@@ -158,5 +162,7 @@ namespace App1Web.Controllers
             }
             base.Dispose(disposing);
         }
+
+        
     }
 }

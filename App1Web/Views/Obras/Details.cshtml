@@ -61,6 +61,14 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.id_obra }) |
+    @if ((String)Session["rol"] == "admin")
+    {
+        @Html.ActionLink("Editar", "Edit", new { id = Model.id_obra })
+    }
+    @if ((String)Session["rol"] == "user")
+    {
+        @Html.ActionLink("Reservar", "Reserva", "Prestamoes", new { id = Model.id_obra }, null)
+    }
     @Html.ActionLink("Volver", "Index")
+
 </p>

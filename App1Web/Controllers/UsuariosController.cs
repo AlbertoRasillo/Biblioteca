@@ -15,9 +15,14 @@ namespace App1Web.Controllers
         private bibliotecaEntities db = new bibliotecaEntities();
 
         // GET: Usuarios
-        public ActionResult Index()
-        {  
-            return View(db.Usuarios.ToList());
+        public ActionResult Index(string searchString)
+        {
+            var usuarios = db.Usuarios.Include(u => u.Prestamo);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                usuarios = usuarios.Where(u => u.nombre.Contains(searchString));
+            }
+            return View(usuarios.ToList());
         }
 
         // GET: Usuarios/Details/5
@@ -141,7 +146,9 @@ namespace App1Web.Controllers
                 if(usu.usuario.Equals(usuarios.usuario) & usu.contraseña.Equals(usuarios.contraseña))
                 {
                     System.Web.HttpContext.Current.Session["rol"] = usu.rol;
-                    return RedirectToAction("Index");
+                    System.Web.HttpContext.Current.Session["nombre"] = usu.nombre;
+                    System.Web.HttpContext.Current.Session["cod_socio"] = usu.cod_socio;
+                    return RedirectToAction("Index", "Obras");
                 }
             }
             return View();

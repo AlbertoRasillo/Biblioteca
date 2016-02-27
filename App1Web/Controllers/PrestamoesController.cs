@@ -17,8 +17,17 @@ namespace App1Web.Controllers
         // GET: Prestamoes
         public ActionResult Index()
         {   //Añadidodo p.Copias.Obra -Obra solo
-            var prestamo = db.Prestamo.Include(p => p.Copias.Obra).Include(p => p.Usuarios);
-            return View(prestamo.ToList());
+            if ((String)Session["rol"] == "user")
+            {
+                String nom = Session["nombre"].ToString();
+                var prestamo = db.Prestamo.Include(p => p.Copias.Obra).Include(p => p.Usuarios);
+                prestamo = prestamo.Where(p => p.Usuarios.nombre.Contains(nom));
+                return View(prestamo.ToList());
+            }
+            else {
+                var prestamo = db.Prestamo.Include(p => p.Copias.Obra).Include(p => p.Usuarios);
+                return View(prestamo.ToList());
+            }
         }
 
         // GET: Prestamoes/Details/5
@@ -139,6 +148,34 @@ namespace App1Web.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        //GET: Prestamoes/Reserva/
+        public ActionResult Reserva([Bind(Include = "id_obra,nombre,fecha_publi,categoria,n_ejemplares, Copias, Autores")] Obra obra,
+            [Bind(Include = "id_obra,comentarios")] Copias copias,
+            [Bind(Include = "id_prestamo,cod_socio,")] Prestamo prestamo)
+        {
+            if (ModelState.IsValid)
+            {
+
+                Prestamo prest = new Prestamo();
+                String nom = Session["nombre"].ToString();
+                var usu = db.Usuarios.Include(u => u.Prestamo);
+                usu = usu.Where(u => u.nombre.Contains(nom));
+                var n_copia = db.Copias.Include(c => c.Obra);
+                n_copia = n_copia.Where(c => c.id_obra.Equals(obra.id_obra));
+
+                prest.cod_socio = Convert.ToInt32(usu);
+                prest.n_copia = Convert.ToInt32(n_copia);
+                db.Prestamo.Add(prest);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.id_obra = new SelectList(db.Cd_Dvd, "id_obra", "id_obra", obra.id_obra);
+            ViewBag.id_obra = new SelectList(db.Libro, "id_obra", "id_obra", obra.id_obra);
+            return View(obra);
         }
     }
 }

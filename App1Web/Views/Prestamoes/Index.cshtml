@@ -3,6 +3,13 @@
 @{
     ViewBag.Title = "Index";
 }
+@{
+    if ((String)Session["rol"] == null)
+    {
+        Response.Redirect("~/Usuarios/Login");
+
+    }
+}
 
 <h2>Listado de Prestamos</h2>
 
